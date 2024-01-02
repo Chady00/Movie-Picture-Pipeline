@@ -4,7 +4,7 @@ inputs:
   package-json-path:
     description: 'Path from root directory to package.json file'
     required: false
-    default: 'frontend'
+    default: '.'
 
 runs:
   using: 'composite'

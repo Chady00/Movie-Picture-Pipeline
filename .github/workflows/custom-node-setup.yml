@@ -29,4 +29,4 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Step 4 - Install Dependencies
-        run: npm install
+        run: cd ${{ github.event.inputs.package-json-path }} && npm install

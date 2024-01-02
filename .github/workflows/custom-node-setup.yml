@@ -15,7 +15,7 @@ jobs:
       - name: Step 2 - Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 'lts'
+          node-version: '18.x'
 
       - name: Step 3 - Cache Node.js dependencies
         uses: actions/cache@v2

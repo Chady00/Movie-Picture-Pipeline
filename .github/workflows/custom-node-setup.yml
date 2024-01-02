@@ -1,9 +1,6 @@
 name: Custom Node.js Setup Action
-description: Provides custom node setup Workflow
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 jobs:
   custom-node-setup:
     runs-on: ubuntu-latest

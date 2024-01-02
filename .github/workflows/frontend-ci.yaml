@@ -1,0 +1,4 @@
+name: FrontEnd CI workflow
+
+on:
+  workflow_dispatch:

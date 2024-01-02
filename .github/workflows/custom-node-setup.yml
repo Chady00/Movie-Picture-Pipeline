@@ -1,0 +1,30 @@
+name: Custom Node.js Setup Action
+description: 'Provides custom node setup Workflow'
+on:
+  push:
+    branches:
+      - main
+jobs:
+  custom-node-setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Step 1 - Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Step 2 - Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts'
+
+      - name: Step 3 - Cache Node.js dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Step 4 - Install Dependencies
+        run: npm install

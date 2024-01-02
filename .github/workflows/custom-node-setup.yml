@@ -1,6 +1,11 @@
 name: Custom Node.js Setup Action
 on:
   workflow_dispatch:
+    inputs:
+      package-json-path:
+        description: 'Path from root directory to package.json file'
+        required: false
+        default: '.'  # Default to the root directory if not provided
 jobs:
   custom-node-setup:
     runs-on: ubuntu-latest

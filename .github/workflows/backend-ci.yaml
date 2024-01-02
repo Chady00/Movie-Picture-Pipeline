@@ -1,0 +1,4 @@
+name: BackEnd CI workflow
+
+on:
+  workflow_dispatch:

@@ -1,5 +1,5 @@
 name: Custom Node.js Setup Action
-description: 'Provides custom node setup Workflow'
+description: Provides custom node setup Workflow
 on:
   push:
     branches:

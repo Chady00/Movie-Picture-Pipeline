@@ -9,15 +9,13 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Step 1 - Checkout Repository
-      uses: actions/checkout@v2
 
-    - name: Step 2 - Setup Node.js
+    - name: Step 1 - Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '18.x'
 
-    - name: Step 3 - Cache Node.js dependencies
+    - name: Step 2 - Cache Node.js dependencies
       uses: actions/cache@v2
       with:
         path: |
@@ -26,7 +24,7 @@ runs:
         restore-keys: |
           ${{ runner.os }}-node-
 
-    - name: Step 4 - Install Dependencies
+    - name: Step 3 - Install Dependencies
       run: |
         cd ${{ inputs.package-json-path }}
         npm install

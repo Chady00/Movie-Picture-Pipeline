@@ -13,4 +13,17 @@ jobs:
       - name: Running Lint
         run: cd frontend && npm run lint
       - name: Completed
-        run: echo "Environment + lint are successfully working"
+        run: echo "Environment + lint done"
+
+  TEST_JOB:
+    runs-on: ubuntu-latest
+    steps:
+      - name: NodeJS Environment Setup
+        uses: Chady00/Movie-Picture-Pipeline@main
+        with:
+          package-json-path: 'frontend'
+      - name: Running tests
+        run: cd frontend && npm run test
+      - name: Completed
+        run: echo "Environment + tests done"
+  

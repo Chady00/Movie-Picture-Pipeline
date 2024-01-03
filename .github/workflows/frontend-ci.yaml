@@ -39,7 +39,7 @@ jobs:
       - name: Build Docker Image
         run: cd frontend && docker build -t mp-frontend:latest .
       - name: Run Docker Image
-        run: docker run -p 5000:5000 --name mp-frontend -d mp-frontend
+        run: docker run -p 3000:3000 --name mp-frontend -d mp-frontend
       - name: Review Logs
         run: docker logs -f mp-frontend
       - name: Completed

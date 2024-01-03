@@ -7,6 +7,8 @@ jobs:
   LINT_JOB:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
       - name: NodeJS Environment Setup
         uses: ./actions/NodeJs_Action
         with:

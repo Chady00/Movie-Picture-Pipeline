@@ -4,43 +4,68 @@ on:
   workflow_dispatch:
 
 jobs:
-  LINT_JOB:
+  lint:
     runs-on: ubuntu-latest
-    steps:
-      - name: NodeJS Environment Setup
-        uses: Chady00/Movie-Picture-Pipeline@main
-        with:
-          package-json-path: 'backend'
-      - name: Running Lint
-        run: cd backend && npm run lint
-      - name: Completed
-        run: echo "Environment + lint done"
 
-  TEST_JOB:
-    runs-on: ubuntu-latest
     steps:
-      - name: NodeJS Environment Setup
-        uses: Chady00/Movie-Picture-Pipeline@main
-        with:
-          package-json-path: 'backend'
-      - name: Running tests
-        run: cd backend && npm run test
-      - name: Completed
-        run: echo "Environment + tests done"
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-  BUILD_JOB:
+      - name: Install dependencies
+        run: cd backend && pipenv install
+
+      - name: Run linter
+        run: cd backend && pipenv run lint
+
+  test:
     runs-on: ubuntu-latest
-    needs: [LINT_JOB, TEST_JOB]
     steps:
-      - name: NodeJS Environment Setup
-        uses: Chady00/Movie-Picture-Pipeline@main
-        with:
-          package-json-path: 'backend'
-      - name: Build Docker Image
-        run: cd backend && docker build -t mp-backend:latest .
-      - name: Run Docker Image
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: cd backend && pipenv install
+
+      - name: Run tests
+        run: cd backend && pipenv run test
+
+  local_run:
+    runs-on: ubuntu-latest
+
+    needs: [lint, test]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: cd backend && pipenv install
+
+      - name: Run application locally
+        run: cd backend && pipenv run serve
+
+  docker_build_and_run:
+    runs-on: ubuntu-latest
+
+    needs: [lint, test, local_run]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: |
+          cd backend
+          docker build --tag mp-backend:latest .
+
+      - name: Run Docker container
         run: docker run -p 5000:5000 --name mp-backend -d mp-backend
-      - name: Review Logs
+
+      - name: Check the running application
+        run: curl http://localhost:5000/movies
+
+      - name: Review logs
         run: docker logs -f mp-backend
-      - name: Completed
-        run: echo "Environment + tests + build done"
+
+      - name: Stop the application
+        run: docker stop mp-backend

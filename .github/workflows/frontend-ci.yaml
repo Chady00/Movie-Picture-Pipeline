@@ -3,10 +3,14 @@ name: FrontEnd CI workflow
 on:
   workflow_dispatch:
 jobs:
-  driverjob:
+  LINT_JOB:
     runs-on: ubuntu-latest
     steps:
       - name: NodeJS Environment Setup
         uses: Chady00/Movie-Picture-Pipeline@main
         with:
           package-json-path: 'frontend'
+      - name: Running Lint
+        run: cd frontend && npm run lint
+      - name: Completed
+        run: echo "Environment + lint are successfully working"

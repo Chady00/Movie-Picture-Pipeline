@@ -6,5 +6,7 @@ jobs:
   driverjob:
     runs-on: ubuntu-latest
     steps:
-      - name: Run a Step
-        run: echo "frontend ci"
+      - name: NodeJS Environment Setup
+        uses: Chady00/Movie-Picture-Pipeline@main
+        with:
+          package-json-path: 'frontend'

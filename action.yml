@@ -27,4 +27,7 @@ runs:
           ${{ runner.os }}-node-
 
     - name: Step 4 - Install Dependencies
-      run: cd ${{ inputs.package-json-path }} && npm install
+      run: |
+        cd ${{ inputs.package-json-path }}
+        npm install
+      shell: bash

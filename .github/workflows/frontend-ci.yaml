@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: NodeJS Environment Setup
-        uses: Chady00/Movie-Picture-Pipeline@main
+        uses: ./actions/NodeJs_Action
         with:
           package-json-path: 'frontend'
       - name: Running Lint

@@ -38,13 +38,18 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+
       - name: NodeJS Environment Setup
         uses: ./actions/NodeJs_Action
         with:
           package-json-path: 'frontend'
+
       - name: Build Docker Image
-        run: cd frontend && docker build -t mp-frontend:latest .
-      - name: Run Docker Image
-        run: docker run -p 3000:3000 --name mp-frontend -d mp-frontend
+        run: |
+          docker build \
+            --build-arg REACT_APP_MOVIE_API_URL=http://localhost:5000 \
+            --tag mp-frontend:latest \
+            ./frontend
+          
       - name: Completed
-        run: echo "Environment + tests + build done"
+        run: echo "Environment + build done"

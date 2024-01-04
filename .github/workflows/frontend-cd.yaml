@@ -1,11 +1,53 @@
-name: FrontEnd deployment workflow
+name: Frontend Continuous Deployment
 
 on:
   workflow_dispatch:
 
 jobs:
-  driverjob:
+  Frontend-CD-EKS-Docker-AWS-ECR:
     runs-on: ubuntu-latest
+    env:
+      REACT_APP_MOVIE_API_URL: http://localhost:5000
     steps:
-      - name: Run a Step
-        run: echo "hello"
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: NodeJS Environment Setup
+        uses: ./actions/NodeJs_Action
+        with:
+          package-json-path: 'frontend'
+
+      - name: Running Lint
+        run: cd frontend && npm run lint
+
+      - name: Running tests
+        run: cd frontend && npm run test
+
+      - name: Build Docker Image
+        run: |
+          docker build \
+            --build-arg REACT_APP_MOVIE_API_URL=$REACT_APP_MOVIE_API_URL \
+            --tag mp-frontend:latest \
+            ./frontend
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
+      
+    - name: Login to container registry
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: true
+        tags: <your-container-registry>/<your-image>:latest
+

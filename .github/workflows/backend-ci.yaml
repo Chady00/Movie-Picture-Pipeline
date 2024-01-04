@@ -13,7 +13,7 @@ jobs:
       - name: Python Dependencies Installation
         uses: ./actions/PyDepend_Action
         with:
-          package-json-path: 'backend'
+          Pipfile-path: 'backend'
 
       - name: code linting
         uses: py-actions/flake8@v2

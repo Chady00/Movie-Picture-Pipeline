@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REACT_APP_MOVIE_API_URL: http://localhost:5000
+      Path: 'frontend'
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -15,20 +16,20 @@ jobs:
       - name: NodeJS Environment Setup
         uses: ./actions/NodeJs_Action
         with:
-          package-json-path: 'frontend'
+          package-json-path: ${{Path}}
 
       - name: Running Lint
-        run: cd frontend && npm run lint
+        run: cd ${{Path}} && npm run lint
 
       - name: Running tests
-        run: cd frontend && npm run test
+        run: cd ${{Path}} && npm run test
 
       - name: Build Docker Image
         run: |
           docker build \
             --build-arg REACT_APP_MOVIE_API_URL=$REACT_APP_MOVIE_API_URL \
-            --tag mp-frontend:latest \
-            ./frontend
+            --tag mp-${{Path}}:latest \
+            ./${{Path}}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -49,5 +50,19 @@ jobs:
       with:
         context: .
         push: true
-        tags: <your-container-registry>/<your-image>:latest
+        file: ${{Path}}
+        tags: <your-container-registry>/frontImage:github.sha
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3
+      
+      - name: Update AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+          aws --version
+
+      - name: Deploy to EKS
+        run: |
+          kustomize build ./frontend/k8s | kubectl apply -f -
 

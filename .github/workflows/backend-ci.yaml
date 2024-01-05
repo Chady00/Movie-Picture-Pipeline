@@ -1,62 +1,53 @@
-name: Backend Continuous Integration
+name: Frontend Continuous Integration
 
 on:
   pull_request:
     branches:
       - main
     paths:
-      - 'backend/**' 
+      - 'frontend/**' # Only trigger on changes within the frontend directory
   workflow_dispatch:
 
 jobs:
-  lint:
+  LINT_JOB:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Python Dependencies Installation
-        uses: ./actions/PyDepend_Action
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        
+      - name: NodeJS Environment Setup
+        uses: ./actions/NodeJs_Action
         with:
-          Pipfile-path: 'backend'
+          package-json-path: 'frontend'
+      - name: Running Lint
+        run: cd frontend && npm run lint
+      - name: Completed
+        run: echo "Environment + lint done"
 
-      - name: code linting
-        uses: py-actions/flake8@v2
-        with:
-          ignore: "E501"   #ignores error E501 which flags any lines >79 characters
-
-  test:
+  TEST_JOB:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: NodeJS Environment Setup
+        uses: ./actions/NodeJs_Action
+        with:
+          package-json-path: 'frontend'
+      - name: Running tests
+        run: cd frontend && npm run test
+      - name: Completed
+        run: echo "Environment + tests done"
+
+  BUILD_JOB:
+    runs-on: ubuntu-latest
+    needs: [LINT_JOB, TEST_JOB]
+    steps:
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Python Dependencies Installation
-        uses: ./actions/PyDepend_Action
+      - name: NodeJS Environment Setup
+        uses: ./actions/NodeJs_Action
         with:
-          Pipfile-path: 'backend'
+          package-json-path: 'frontend'
 
-      - name: Run tests using pyTest
-        run: |
-          pip install pytest
-          cd backend && pytest
-
-
-  docker_build:
-    runs-on: ubuntu-latest
-
-    needs: [lint, test]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Python Dependencies Installation
-        uses: ./actions/PyDepend_Action
-        with:
-          Pipfile-path: 'backend'
-          
-      - name: Build Docker image
-        run: |
-          cd backend
-          docker build --tag mp-backend:latest .
+     

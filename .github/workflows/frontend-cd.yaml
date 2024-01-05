@@ -50,7 +50,7 @@ jobs:
           context: .
           push: true
           file: ${{ env.Path }}
-          tags: 482334913182.dkr.ecr.us-east-1.amazonaws.com/frontImage:github.sha
+          tags: 482334913182.dkr.ecr.us-east-1.amazonaws.com/frontimage:github.sha
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v3

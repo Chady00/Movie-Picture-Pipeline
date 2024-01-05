@@ -41,8 +41,8 @@ jobs:
         env:
           REG: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          docker build --build-arg REACT_APP_MOVIE_API_URL=${{ env.REACT_APP_MOVIE_API_URL }} -t $REG/moviefrontimage:github.sha ./frontend
-          docker push $REG/moviefrontimage:github.sha
+          docker build --build-arg REACT_APP_MOVIE_API_URL=${{ env.REACT_APP_MOVIE_API_URL }} -t $REG/frontend:github.sha ./frontend
+          docker push $REG/frontend:github.sha
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v3

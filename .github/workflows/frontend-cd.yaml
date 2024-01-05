@@ -39,17 +39,16 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: us-east-1
 
-      - name: Login to container registry
-        uses: docker/login-action@v3
-        with:
-          registry: 482334913182.dkr.ecr.us-east-1.amazonaws.com
+      - name: Login to Container Registry
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: 482334913182.dkr.ecr.us-east-1.amazonaws.com/frontimage:github.sha
+      - name: Build, tag, and push docker image to Amazon ECR
+        env:
+          REG: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          docker build --build-arg REACT_APP_MOVIE_API_URL=${{ env.REACT_APP_MOVIE_API_URL }} -t $REG/$REPOSITORY:$github.sha ./frontend
+          docker push $REG/moviefrontimage:$github.sha
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v3

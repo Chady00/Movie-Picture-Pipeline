@@ -52,6 +52,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y awscli
           aws --version
+          
+      - name: Update kube config
+        run: aws eks update-kubeconfig --name cluster --region us-east-1
 
       - name: Deploy to EKS
         run: |

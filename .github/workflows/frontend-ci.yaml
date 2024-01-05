@@ -1,6 +1,11 @@
 name: Frontend Continuous Integration
 
 on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'frontend/**' # Only trigger on changes within the frontend directory
   workflow_dispatch:
 
 jobs:
@@ -45,12 +50,4 @@ jobs:
         with:
           package-json-path: 'frontend'
 
-      - name: Build Docker Image
-        run: |
-          docker build \
-            --build-arg REACT_APP_MOVIE_API_URL=http://localhost:5000 \
-            --tag mp-frontend:latest \
-            ./frontend
-          
-      - name: Completed
-        run: echo "Environment + build done"
+     

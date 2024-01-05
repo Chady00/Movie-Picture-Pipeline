@@ -17,10 +17,8 @@ jobs:
         uses: ./actions/NodeJs_Action
         with:
           package-json-path: ${{ env.Path }}
-          package-json-path: ${{ env.Path }}
 
       - name: Running Lint
-        run: cd ${{ env.Path }} && npm run lint
         run: cd ${{ env.Path }} && npm run lint
 
       - name: Running tests
@@ -63,11 +61,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y awscli
           aws --version
-
-      - name: Deploy to EKS
-        run: |
-          kustomize build ./frontend/k8s | kubectl apply -f -
-
 
       - name: Deploy to EKS
         run: |

@@ -49,7 +49,6 @@ jobs:
         with:
           context: .
           push: true
-          file: ${{ env.Path }}
           tags: 482334913182.dkr.ecr.us-east-1.amazonaws.com/frontimage:github.sha
 
       - name: Install kubectl

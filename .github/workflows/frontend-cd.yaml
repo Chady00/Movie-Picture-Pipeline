@@ -24,12 +24,6 @@ jobs:
       - name: Running tests
         run: cd ${{ env.Path }} && npm run test
 
-      - name: Build Docker Image
-        run: |
-          docker build \
-            --build-arg REACT_APP_MOVIE_API_URL=$REACT_APP_MOVIE_API_URL \
-            --tag mp-${{ env.Path }}:latest \
-            ./${{ env.Path }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -47,8 +41,8 @@ jobs:
         env:
           REG: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          docker build --build-arg REACT_APP_MOVIE_API_URL=${{ env.REACT_APP_MOVIE_API_URL }} -t $REG/moviefrontimage:$github.sha ./frontend
-          docker push $REG/moviefrontimage:$github.sha
+          docker build --build-arg REACT_APP_MOVIE_API_URL=${{ env.REACT_APP_MOVIE_API_URL }} -t $REG/moviefrontimage:github.sha ./frontend
+          docker push $REG/moviefrontimage:github.sha
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v3

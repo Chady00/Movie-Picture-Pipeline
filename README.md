@@ -1,5 +1,7 @@
 ## **Movie Picture Pipeline**
 
+<sup>Exclusively composed by Chady Achraf (Chady00), this README bears the sole authorship of Chady himself. Only Chady00 contributed to the project development steps.</sup>
+
 ## Project Overview
 
 **This project aims to showcase expertise in DevOps tools and CI/CD practices by automating the development workflows for a web application that serves as a catalog of Movie Picture movies**. The application consists of a frontend UI built with TypeScript and React, and a backend API built with Python and Flask. The goal is to accelerate the release cycle by implementing Continuous Integration (CI) and Continuous Deployment (CD) pipelines using GitHub Actions and deploying the applications to an existing Kubernetes cluster.
